@@ -1,13 +1,18 @@
 package com.psk.imagepicker;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.psk.customimagepicker.CaptureImageFragment;
+import com.psk.customimagepicker.CustomImagePicker;
+import com.psk.customimagepicker.listeners.CustomImagePickerListeners;
 
-public class MainActivity extends AppCompatActivity implements CaptureImageFragment.CaptureImageListener {
+import java.io.File;
+
+public class MainActivity extends AppCompatActivity implements CustomImagePickerListeners {
+    private String path = Environment.getExternalStorageDirectory() + File.separator + "SamplePath";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,12 +21,14 @@ public class MainActivity extends AppCompatActivity implements CaptureImageFragm
     }
 
     public void pickImage(View view) {
-        CaptureImageFragment fragment = CaptureImageFragment.getInstance("ABC.jpg");
-        getSupportFragmentManager().beginTransaction().add(fragment, fragment.getClass().getName()).commit();
+        CustomImagePicker.getInstance(getSupportFragmentManager())
+                .path(path)
+                .fileName("xyz")
+                .build();
     }
 
     @Override
-    public void onImageSelected(String path, boolean isPdfFile) {
+    public void onImageOrFileSelected(String path, boolean isPdfFile) {
         Log.e("Path", path);
     }
 }

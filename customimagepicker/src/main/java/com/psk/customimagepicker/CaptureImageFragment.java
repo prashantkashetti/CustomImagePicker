@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -14,6 +13,9 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.psk.customimagepicker.filePicker.FilePickerActivity;
+import com.psk.customimagepicker.listeners.CustomImagePickerListeners;
+import com.psk.customimagepicker.utils.GetPathUtils;
+import com.psk.customimagepicker.utils.ImageCompressionUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,16 +31,16 @@ import java.util.List;
  */
 
 public class CaptureImageFragment extends Fragment {
-    private static final String INTENT_EXTRA_FILE_NAME = "fileName";
     private static final int PICK_IMAGE_REQUEST_CODE = 100;
-    private CaptureImageListener listener;
+    private CustomImagePickerListeners listener;
     private File finalFile;
-    private String path = Environment.getExternalStorageDirectory() + File.separator + "CustomImagePicker";
+    private String path;
 
-    public static CaptureImageFragment getInstance(String fileName) {
+    public static CaptureImageFragment getInstance(String path, String fileName) {
         CaptureImageFragment fragment = new CaptureImageFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(INTENT_EXTRA_FILE_NAME, fileName);
+        bundle.putString("fileName", fileName);
+        bundle.putString("path", path);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -48,18 +50,19 @@ public class CaptureImageFragment extends Fragment {
         super.onAttach(context);
         try {
             if (getParentFragment() != null)
-                listener = (CaptureImageListener) getParentFragment();
+                listener = (CustomImagePickerListeners) getParentFragment();
             else
-                listener = (CaptureImageListener) context;
+                listener = (CustomImagePickerListeners) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement " + CaptureImageListener.class.getName());
+            throw new ClassCastException(context.toString() + " must implement " + CustomImagePickerListeners.class.getName());
         }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String fileName = getArguments().getString(INTENT_EXTRA_FILE_NAME);
+        String fileName = getArguments().getString("fileName");
+        path = getArguments().getString("path");
         captureImage(fileName);
     }
 
@@ -123,7 +126,7 @@ public class CaptureImageFragment extends Fragment {
                             File originalFile = new File(pdfPath);
                             File newFile = new File(path, finalFile.getName().split("\\.")[0] + ".pdf");
                             copy(originalFile, newFile);
-                            listener.onImageSelected(newFile.getAbsolutePath(), true);
+                            listener.onImageOrFileSelected(newFile.getAbsolutePath(), true);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -164,7 +167,7 @@ public class CaptureImageFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            listener.onImageSelected(path, false);
+                            listener.onImageOrFileSelected(path, false);
                         }
                     });
                 } else {
@@ -177,9 +180,5 @@ public class CaptureImageFragment extends Fragment {
                 }
             }
         }).start();
-    }
-
-    public interface CaptureImageListener {
-        void onImageSelected(String path, boolean isPdfFile);
     }
 }

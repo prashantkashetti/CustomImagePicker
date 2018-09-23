@@ -1,4 +1,4 @@
-package com.psk.customimagepicker;
+package com.psk.customimagepicker.utils;
 
 import android.content.ContentUris;
 import android.content.Context;
