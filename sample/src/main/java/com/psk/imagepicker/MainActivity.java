@@ -13,15 +13,17 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements CustomImagePickerListeners {
     private String path = Environment.getExternalStorageDirectory() + File.separator + "SamplePath";
+    private CustomImagePicker customImagePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        customImagePicker = CustomImagePicker.getInstance(getSupportFragmentManager());
     }
 
     public void pickImage(View view) {
-        CustomImagePicker.getInstance(getSupportFragmentManager())
+        customImagePicker
                 .path(path)
                 .fileName("xyz")
                 .build();
@@ -30,5 +32,10 @@ public class MainActivity extends AppCompatActivity implements CustomImagePicker
     @Override
     public void onImageOrFileSelected(String path, boolean isPdfFile) {
         Log.e("Path", path);
+    }
+
+    @Override
+    public void onAppPermissionDenied() {
+        Log.e("onAppPermissionDenied", "App Permission Denied");
     }
 }

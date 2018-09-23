@@ -6,4 +6,6 @@ package com.psk.customimagepicker.listeners;
 
 public interface CustomImagePickerListeners {
     void onImageOrFileSelected(String path, boolean isPdfFile);
+
+    void onAppPermissionDenied();
 }

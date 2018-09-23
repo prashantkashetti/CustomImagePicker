@@ -1,12 +1,15 @@
 package com.psk.customimagepicker;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -31,10 +34,11 @@ import java.util.List;
  */
 
 public class CaptureImageFragment extends Fragment {
-    private static final int PICK_IMAGE_REQUEST_CODE = 100;
+    private final int PICK_IMAGE_REQUEST_CODE = 100;
+    private final int PERMISSION_REQUEST_CODE = 200;
     private CustomImagePickerListeners listener;
     private File finalFile;
-    private String path;
+    private String path, fileName;
 
     public static CaptureImageFragment getInstance(String path, String fileName) {
         CaptureImageFragment fragment = new CaptureImageFragment();
@@ -61,15 +65,36 @@ public class CaptureImageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String fileName = getArguments().getString("fileName");
+        fileName = getArguments().getString("fileName");
         path = getArguments().getString("path");
-        captureImage(fileName);
+        checkPermissions();
+    }
+
+    private void checkPermissions() {
+        requestPermissions(new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+        }, PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (PERMISSION_REQUEST_CODE == requestCode) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                captureImage(fileName);
+            } else {
+                listener.onAppPermissionDenied();
+            }
+        }
     }
 
     public void captureImage(String fileName) {
-        List<Intent> pickFileIntents = new ArrayList<Intent>();
-
-
+        List<Intent> pickFileIntents = new ArrayList<>();
         File storagePath = new File(path);
         if (!storagePath.exists()) {
             if (!storagePath.mkdirs()) {
