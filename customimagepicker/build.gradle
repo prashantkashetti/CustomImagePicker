@@ -1,18 +1,37 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'CustomImagePicker'
+    bintrayName = 'CustomImagePicker'
+
+    publishedGroupId = 'com.psk.customimagepicker'
+    libraryName = 'CustomImagePicker'
+    artifact = 'customimagepicker'
+
+    libraryDescription = 'This library is used as custom image picker'
+
+    siteUrl = 'https://github.com/prashantkashetti/CustomImagePicker'
+    gitUrl = 'https://github.com/prashantkashetti/CustomImagePicker.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'prashantkashetti'
+    developerName = 'Prashant Kashetti'
+    developerEmail = 'prashantkashetti@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 27
-
-
-
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -21,7 +40,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
@@ -32,3 +50,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 }
+
+//Add these lines to publish library to bintray
+//Place it at the end of the file
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
