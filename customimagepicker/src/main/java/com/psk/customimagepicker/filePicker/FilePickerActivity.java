@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.psk.customimagepicker.R;
-import com.psk.customimagepicker.models.PdfDocumentModel;
+import com.psk.customimagepicker.models.DocumentModel;
 
 import java.io.File;
 import java.util.List;
@@ -38,9 +38,9 @@ public class FilePickerActivity extends AppCompatActivity {
         llNoRecords = findViewById(R.id.llNoRecords);
         ivSad = findViewById(R.id.ivSad);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        new DocScannerTask(this, new FileResultCallback<PdfDocumentModel>() {
+        new DocScannerTask(this, new FileResultCallback<DocumentModel>() {
             @Override
-            public void onResultCallback(List<PdfDocumentModel> files) {
+            public void onResultCallback(List<DocumentModel> files) {
                 if (files == null || files.size() == 0) {
                     llNoRecords.setVisibility(View.VISIBLE);
                     tvNoRecords.setText("No Files Found");
@@ -50,19 +50,19 @@ public class FilePickerActivity extends AppCompatActivity {
                 }
                 recyclerView.setAdapter(new FileListAdapter(FilePickerActivity.this, files));
             }
-        }).execute();
+        }, false).execute();
     }
 
-    public void onFileSelected(PdfDocumentModel pdfDocumentModel) {
-        File f = new File(pdfDocumentModel.getPath());
+    public void onFileSelected(DocumentModel documentModel) {
+        File f = new File(documentModel.getPath());
         float sizeInMb = f.length() / (1024f * 1024f);
         /*if (sizeInMb > 2) {
             toastUtils.show(getString(R.string.file_size_error));
         } else {*/
-            Intent intent = new Intent();
-            intent.putExtra(INTENT_EXTRA_PDF_PATH, pdfDocumentModel.getPath());
-            setResult(RESULT_OK, intent);
-            finish();
+        Intent intent = new Intent();
+        intent.putExtra(INTENT_EXTRA_PDF_PATH, documentModel.getPath());
+        setResult(RESULT_OK, intent);
+        finish();
 //        }
     }
 }

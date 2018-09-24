@@ -4,14 +4,14 @@ package com.psk.customimagepicker.models;
  * Created by psk on 9/23/2018.
  */
 
-public class PdfDocumentModel {
+public class DocumentModel {
     private int id;
     private String title;
     private String path;
     private String mimeType;
     private String size;
 
-    public PdfDocumentModel(int id, String title, String path) {
+    public DocumentModel(int id, String title, String path) {
         this.id = id;
         this.title = title;
         this.path = path;
@@ -20,11 +20,11 @@ public class PdfDocumentModel {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PdfDocumentModel)) return false;
+        if (!(o instanceof DocumentModel)) return false;
 
-        PdfDocumentModel pdfDocumentModel = (PdfDocumentModel) o;
+        DocumentModel documentModel = (DocumentModel) o;
 
-        return id == pdfDocumentModel.id;
+        return id == documentModel.id;
     }
 
     public int getId() {
@@ -65,5 +65,10 @@ public class PdfDocumentModel {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        return path;
     }
 }

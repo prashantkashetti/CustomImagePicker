@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.psk.customimagepicker.R;
-import com.psk.customimagepicker.models.PdfDocumentModel;
+import com.psk.customimagepicker.models.DocumentModel;
 
 import java.util.List;
 
@@ -21,11 +21,11 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
 
 
     private final FilePickerActivity activity;
-    private List<PdfDocumentModel> pdfDocumentModels;
+    private List<DocumentModel> documentModels;
 
-    public FileListAdapter(FilePickerActivity activity, List<PdfDocumentModel> pdfDocumentModels) {
+    public FileListAdapter(FilePickerActivity activity, List<DocumentModel> documentModels) {
         this.activity = activity;
-        this.pdfDocumentModels = pdfDocumentModels;
+        this.documentModels = documentModels;
     }
 
     @Override
@@ -37,20 +37,20 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
 
     @Override
     public void onBindViewHolder(final FileViewHolder holder, int position) {
-        final PdfDocumentModel pdfDocumentModel = pdfDocumentModels.get(position);
-        holder.fileNameTextView.setText(pdfDocumentModel.getTitle());
-        holder.fileSizeTextView.setText(Formatter.formatShortFileSize(activity, Long.parseLong(pdfDocumentModel.getSize())));
+        final DocumentModel documentModel = documentModels.get(position);
+        holder.fileNameTextView.setText(documentModel.getTitle());
+        holder.fileSizeTextView.setText(Formatter.formatShortFileSize(activity, Long.parseLong(documentModel.getSize())));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.onFileSelected(pdfDocumentModel);
+                activity.onFileSelected(documentModel);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return pdfDocumentModels.size();
+        return documentModels.size();
     }
 
     public static class FileViewHolder extends RecyclerView.ViewHolder {
