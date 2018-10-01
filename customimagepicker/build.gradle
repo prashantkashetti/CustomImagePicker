@@ -49,6 +49,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation ("com.github.bumptech.glide:recyclerview-integration:4.8.0") {
+        // Excludes the support library because it's already included by Glide.
+        transitive = false
+    }
 }
 
 //Add these lines to publish library to bintray

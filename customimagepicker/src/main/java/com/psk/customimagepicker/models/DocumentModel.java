@@ -10,6 +10,15 @@ public class DocumentModel {
     private String path;
     private String mimeType;
     private String size;
+    private int count;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public DocumentModel(int id, String title, String path) {
         this.id = id;

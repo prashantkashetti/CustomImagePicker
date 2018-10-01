@@ -14,5 +14,6 @@
             android:name=".filePicker.FilePickerActivity"
             android:icon="@drawable/ic_pdf"
             android:label="PDF" />
+        <activity android:name=".gallery.GalleryActivity" />
     </application>
 </manifest>

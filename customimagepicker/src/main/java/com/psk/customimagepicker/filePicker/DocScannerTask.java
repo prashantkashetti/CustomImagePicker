@@ -10,6 +10,7 @@ import android.webkit.MimeTypeMap;
 
 import com.psk.customimagepicker.models.DocumentModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +81,8 @@ public class DocScannerTask extends AsyncTask<Void, Void, List<DocumentModel>> {
             String title = data.getString(data.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE));
 
             if (path != null) {
+                if (!new File(path).exists())
+                    continue;
                 DocumentModel documentModel = new DocumentModel(imageId, title, path);
 
                 String mimeType = data.getString(data.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE));
