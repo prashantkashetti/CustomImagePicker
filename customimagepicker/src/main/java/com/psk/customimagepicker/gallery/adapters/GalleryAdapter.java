@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.psk.customimagepicker.R;
 import com.psk.customimagepicker.gallery.callbacks.GalleryAdapterCallback;
 import com.psk.customimagepicker.models.DocumentModel;
@@ -35,7 +36,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final DocumentModel documentModel = documentModels.get(position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +44,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                 callback.onListItemClicked(documentModel);
             }
         });
-        Glide.with(holder.ivImage.getContext()).load(documentModel.getPath()).into(holder.ivImage);
+        RequestOptions options = new RequestOptions().centerCrop();
+        Glide.with(holder.ivImage.getContext()).load(documentModel.getPath()).apply(options).into(holder.ivImage);
     }
 
     @Override

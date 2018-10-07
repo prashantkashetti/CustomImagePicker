@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.psk.customimagepicker.CustomImagePicker;
 import com.psk.customimagepicker.gallery.GalleryActivity;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements CustomImagePicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ImageView imageView = findViewById(R.id.ivImage);
         customImagePicker = CustomImagePicker.getInstance(getSupportFragmentManager());
     }
 
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements CustomImagePicker
             for (File file : files)
                 Log.e("Folder", file.getAbsolutePath());
         }*/
+
+        ///storage/6238-6330/DCIM/Camera/IMG_20161027_184522017_BURST011.jpg
         Intent intent = new Intent(this, GalleryActivity.class);
         startActivity(intent);
     }

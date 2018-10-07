@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.psk.customimagepicker.models.DocumentModel;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class MyPreloadModelProvider implements ListPreloader.PreloadModelProvide
         DocumentModel documentModel = (DocumentModel) item;
         return GlideApp.with(context)
                 .load(documentModel.getPath())
-                .override(imageWidthPixels, imageHeightPixels);
+//                .override(imageWidthPixels, imageHeightPixels)
+                .transform(new CenterCrop());
     }
 }

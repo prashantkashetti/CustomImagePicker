@@ -1,16 +1,17 @@
 package com.psk.customimagepicker.gallery;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader;
-import com.bumptech.glide.util.FixedPreloadSizeProvider;
+import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.psk.customimagepicker.R;
 import com.psk.customimagepicker.filePicker.DocScannerTask;
 import com.psk.customimagepicker.filePicker.FileResultCallback;
@@ -29,30 +30,43 @@ public class GalleryActivity extends AppCompatActivity implements GalleryAdapter
     private RecyclerView rvGallery;
     private final int imageWidthPixels = 1024;
     private final int imageHeightPixels = 768;
+    private GridLayoutManager gridLayoutManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         rvGallery = findViewById(R.id.rvGallery);
-//        rvGallery.setLayoutManager(new GridLayoutManager(this, 3));
-        rvGallery.setLayoutManager(new LinearLayoutManager(this));
+        gridLayoutManager = new GridLayoutManager(this, 3);
+        initData();
+    }
+
+    private void initData() {
+        rvGallery.setLayoutManager(gridLayoutManager);
         new DocScannerTask(this, new FileResultCallback<DocumentModel>() {
             @Override
             public void onResultCallback(List<DocumentModel> files) {
                 if (files == null || files.size() == 0) {
-                    Log.e("ERROR", "No FIles Found");
+                    Log.e("ERROR", "No Files Found");
                     return;
                 }
                 init((ArrayList<DocumentModel>) files);
-//                rvGallery.setAdapter(new GalleryAdapter((ArrayList<DocumentModel>) files, GalleryActivity.this));
             }
         }, true).execute();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            gridLayoutManager.setSpanCount(3);
+        } else {
+            gridLayoutManager.setSpanCount(5);
+        }
+    }
+
     private void init(ArrayList<DocumentModel> documentModels) {
-        ListPreloader.PreloadSizeProvider sizeProvider =
-                new FixedPreloadSizeProvider(imageWidthPixels, imageHeightPixels);
+        ListPreloader.PreloadSizeProvider sizeProvider = new ViewPreloadSizeProvider();
         ListPreloader.PreloadModelProvider modelProvider = new MyPreloadModelProvider(documentModels, this);
         RecyclerViewPreloader<DocumentModel> preloader =
                 new RecyclerViewPreloader<DocumentModel>(
